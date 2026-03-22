@@ -1,0 +1,205 @@
+@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=DM+Sans:wght@300;400;500;600&family=Syne:wght@700;800&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg-900: #09090f;
+  --bg-800: #0d0d18;
+  --bg-700: #111120;
+  --bg-600: #161628;
+  --accent-cyan: #6ee7f7;
+  --accent-purple: #a78bfa;
+  --accent-green: #4ade80;
+  --accent-orange: #fb923c;
+  --border-subtle: rgba(110, 231, 247, 0.08);
+  --border-default: rgba(110, 231, 247, 0.16);
+  --border-strong: rgba(110, 231, 247, 0.35);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  background: var(--bg-900);
+  color: #e2e8f0;
+  font-family: "DM Sans", sans-serif;
+  font-size: 120%;
+  height: 100%;
+  overflow-x: hidden;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-800);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(110, 231, 247, 0.2);
+  border-radius: 2px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(110, 231, 247, 0.4);
+}
+
+/* Noise texture overlay */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 999;
+  opacity: 0.4;
+}
+
+/* Grid background */
+.grid-bg {
+  background-image: linear-gradient(
+      rgba(110, 231, 247, 0.03) 1px,
+      transparent 1px
+    ),
+    linear-gradient(90deg, rgba(110, 231, 247, 0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* Glow effects */
+.glow-cyan {
+  box-shadow: 0 0 20px rgba(110, 231, 247, 0.15),
+    0 0 60px rgba(110, 231, 247, 0.05);
+}
+
+.glow-purple {
+  box-shadow: 0 0 20px rgba(167, 139, 250, 0.2),
+    0 0 60px rgba(167, 139, 250, 0.05);
+}
+
+.glow-text-cyan {
+  text-shadow: 0 0 20px rgba(110, 231, 247, 0.5);
+}
+
+/* Card styles */
+.card {
+  background: rgba(13, 13, 24, 0.8);
+  border: 1px solid var(--border-default);
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+}
+
+.card-hover {
+  transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s;
+}
+
+.card-hover:hover {
+  border-color: var(--border-strong);
+  box-shadow: 0 4px 24px rgba(110, 231, 247, 0.08);
+  transform: translateY(-1px);
+}
+
+/* Kanban drag */
+.dragging {
+  opacity: 0.4;
+  scale: 0.98;
+}
+
+.drag-over {
+  border-color: var(--accent-cyan) !important;
+  box-shadow: 0 0 0 2px rgba(110, 231, 247, 0.2);
+}
+
+/* Timer ring */
+@keyframes timer-pulse {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 8px rgba(110, 231, 247, 0.4));
+  }
+  50% {
+    filter: drop-shadow(0 0 20px rgba(110, 231, 247, 0.8));
+  }
+}
+
+.timer-ring {
+  animation: timer-pulse 2s ease-in-out infinite;
+}
+
+.timer-ring-break {
+  animation: none;
+  filter: drop-shadow(0 0 8px rgba(74, 222, 128, 0.4));
+}
+
+/* Heatmap */
+.heatmap-cell {
+  transition: transform 0.1s, opacity 0.1s;
+}
+
+.heatmap-cell:hover {
+  transform: scale(1.3);
+  z-index: 10;
+  position: relative;
+}
+
+/* Nav indicator */
+.nav-item.active::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 2px;
+  height: 60%;
+  background: var(--accent-cyan);
+  border-radius: 0 2px 2px 0;
+  box-shadow: 0 0 8px rgba(110, 231, 247, 0.6);
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-in {
+  animation: slideIn 0.25s ease-out;
+}
+
+/* Focus ring */
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid rgba(110, 231, 247, 0.5);
+  outline-offset: 2px;
+}
+
+/* Tag pill */
+.tag-pill {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.65rem;
+  padding: 2px 8px;
+  border-radius: 4px;
+  border: 1px solid;
+  letter-spacing: 0.05em;
+}
+
+/* Priority indicators */
+.priority-high {
+  border-left: 2px solid #f87171;
+}
+.priority-medium {
+  border-left: 2px solid #fb923c;
+}
+.priority-low {
+  border-left: 2px solid #6ee7f7;
+}

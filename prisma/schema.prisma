@@ -1,0 +1,63 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Task {
+  id          String   @id @default(cuid())
+  userId      String   // Supabase auth user id
+  title       String
+  description String?
+  status      String   @default("todo") // todo | inprogress | done
+  tags        String[] @default([])
+  priority    String   @default("medium") // low | medium | high
+  order       Int      @default(0)
+  totalTime   Int      @default(0) // total minutes tracked
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  pomodoroSessions PomodoroSession[]
+}
+
+model PomodoroSession {
+  id        String   @id @default(cuid())
+  userId    String   // Supabase auth user id
+  taskId    String?
+  task      Task?    @relation(fields: [taskId], references: [id], onDelete: SetNull)
+  duration  Int      // minutes
+  type      String   // work | break
+  startedAt DateTime
+  endedAt   DateTime?
+  completed Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model Habit {
+  id        String   @id @default(cuid())
+  userId    String   // Supabase auth user id
+  name      String
+  icon      String   @default("⭐")
+  color     String   @default("#6366f1")
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  completions HabitCompletion[]
+}
+
+model HabitCompletion {
+  id        String   @id @default(cuid())
+  habitId   String
+  habit     Habit    @relation(fields: [habitId], references: [id], onDelete: Cascade)
+  date      String   // YYYY-MM-DD format
+  createdAt DateTime @default(now())
+
+  @@unique([habitId, date])
+}
